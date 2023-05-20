@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230513134632_init")]
+    [Migration("20230520185000_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -235,6 +235,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -260,20 +264,21 @@ namespace Data.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             CityID = 0,
-                            ConcurrencyStamp = "3bd890f4-aed4-4057-bf73-2327cae5ac9c",
+                            ConcurrencyStamp = "77ce5da9-c96f-452e-8eea-4aa67701c77c",
                             CountryID = 0,
                             Email = "string",
                             EmailConfirmed = false,
                             FirstName = "string",
-                            LastLogin = new DateTime(2023, 5, 13, 13, 46, 32, 304, DateTimeKind.Utc).AddTicks(9560),
+                            LastLogin = new DateTime(2023, 5, 20, 18, 49, 59, 667, DateTimeKind.Utc).AddTicks(8045),
                             LastName = "string",
                             LockoutEnabled = false,
                             NormalizedUserName = "STRING",
-                            PasswordHash = "AQAAAAIAAYagAAAAENdTFML7y0Mx7Ok+X9Ez1/U4KwfpIdfFxD9z7R1H08EULKtkMqp7efsurvKKnaTgeQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG3Ql3jLbsGGhejhD7KvvFRCgb+CMWOF42hIWAvEpgRtlYplxd35JZseTD1okvb5yA==",
                             PhoneNumberConfirmed = false,
-                            RegisterationDate = new DateTime(2023, 5, 13, 13, 46, 32, 304, DateTimeKind.Utc).AddTicks(9557),
+                            RegisterationDate = new DateTime(2023, 5, 20, 18, 49, 59, 667, DateTimeKind.Utc).AddTicks(8042),
                             SecurityStamp = "74A23521-DE60-4063-BD50-74EF88A9C24F",
                             TenantId = "3E090B05-5C07-49E9-968B-83E73CFA2E0E",
+                            TenantName = "string",
                             TwoFactorEnabled = false,
                             UserName = "string"
                         });
@@ -299,6 +304,140 @@ namespace Data.Migrations
                             UserId = 1,
                             RoleId = 1
                         });
+                });
+
+            modelBuilder.Entity("Models.Models.Author", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nationality")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("Models.Models.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("Models.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Models.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -397,6 +536,44 @@ namespace Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Models.Models.Book", b =>
+                {
+                    b.HasOne("Models.Models.Author", "Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Models.Category", "Category")
+                        .WithMany("Books")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Models.Review", "Review")
+                        .WithMany("BooksReviews")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("Models.Models.Review", b =>
+                {
+                    b.HasOne("Models.Models.ApplicationUser", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Models.Models.ApplicationRole", b =>
                 {
                     b.Navigation("UserRoles");
@@ -404,7 +581,24 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Models.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Reviews");
+
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Models.Models.Author", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("Models.Models.Category", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("Models.Models.Review", b =>
+                {
+                    b.Navigation("BooksReviews");
                 });
 #pragma warning restore 612, 618
         }

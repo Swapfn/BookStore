@@ -53,7 +53,7 @@ namespace Services
                     user.UserTokens.Add(refreshToken);
                 }
                 //IHttpConnectionFeature feature = _context.HttpContext.Features.Get<IHttpConnectionFeature>();
-                user.LoginIPAddress = _context.HttpContext.Connection.RemoteIpAddress.ToString(); ;
+                user.LoginIPAddress = _context.HttpContext.Connection.RemoteIpAddress.ToString();
                 user.LastLogin = DateTime.UtcNow;
                 await _userManager.UpdateAsync(user);
                 return Ok(refreshToken);
@@ -97,6 +97,7 @@ namespace Services
                 RegisterationDate = DateTime.UtcNow,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 TenantId = Guid.NewGuid().ToString(),
+                TenantName = model.TenantName,
             };
 
             IdentityResult resultUser = await _userManager.CreateAsync(user, model.Password);

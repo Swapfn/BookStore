@@ -44,7 +44,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 //builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
@@ -73,6 +73,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 RegisterServices.AddRepositories(builder.Services);
 RegisterServices.AddServices(builder.Services);
@@ -86,7 +87,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Apply pending migrations
-using(IServiceScope? scope = app.Services.CreateScope())
+using (IServiceScope? scope = app.Services.CreateScope())
 {
     ApplicationDbContext? context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     context.Database.Migrate();

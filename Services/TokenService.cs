@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Models.Models;
 using Services.Contracts;
@@ -26,6 +27,7 @@ namespace Services
             List<Claim> authClaims = new()
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim(ClaimConstants.TenantId, user.TenantId ?? string.Empty),
             };
 
             // Role Claims

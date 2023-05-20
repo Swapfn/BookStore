@@ -20,6 +20,7 @@ namespace Data.Configurations
                     LastName = "string",
                     Email = "string",
                     TenantId = "3E090B05-5C07-49E9-968B-83E73CFA2E0E",
+                    TenantName = "string",
                     SecurityStamp = "74A23521-DE60-4063-BD50-74EF88A9C24F",
                     RegisterationDate = DateTime.UtcNow,
                     LastLogin  = DateTime.UtcNow,

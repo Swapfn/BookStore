@@ -8,5 +8,7 @@
         public required string Email { get; set; }
         public required string MobileNumber { get; set; }
         public required string Password { get; set; }
+        public required string TenantName { get; set; }
+
     }
 }
