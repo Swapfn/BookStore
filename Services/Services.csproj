@@ -17,6 +17,7 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Data.Repositories\Data.Repositories.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 

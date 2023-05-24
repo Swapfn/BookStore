@@ -3,23 +3,24 @@
     public class Tenant
     {
         public string TenantId { get; set; } = null!;
-        public string TenantName { get; set; } = null!;
     }
     public interface ITenantService
     {
-        void SetTenant(string tenantName);
-        string TenantName { get; }
+        void SetTenant(string tenantId);
+        string TenantId { get; }
+        public string GetTenant();
     }
-
-    public class TenantService : ITenantService 
+    public class TenantService : ITenantService
     {
         public string TenantId { get; private set; } = null!;
-        public string TenantName { get; private set; } = null!;
 
-        public void SetTenant(string tenantName)
+        public void SetTenant(string tenantId)
         {
-            TenantId = Guid.NewGuid().ToString();
-            TenantName = tenantName;
+            TenantId = tenantId;
+        }
+        public string GetTenant()
+        {
+            return TenantId;
         }
     }
 }

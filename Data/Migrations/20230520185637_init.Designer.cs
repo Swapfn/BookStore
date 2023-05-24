@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230520185637_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,18 +279,18 @@ namespace Data.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             CityID = 0,
-                            ConcurrencyStamp = "337fc6b6-fde8-4d8f-af69-f11f1f35b95c",
+                            ConcurrencyStamp = "97e06ef7-ea09-49f8-9f8c-b89d70619dd5",
                             CountryID = 0,
                             Email = "string",
                             EmailConfirmed = false,
                             FirstName = "string",
-                            LastLogin = new DateTime(2023, 5, 23, 21, 17, 51, 768, DateTimeKind.Utc).AddTicks(2470),
+                            LastLogin = new DateTime(2023, 5, 20, 18, 56, 36, 715, DateTimeKind.Utc).AddTicks(2267),
                             LastName = "string",
                             LockoutEnabled = false,
                             NormalizedUserName = "STRING",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJTNqaT4wjUxp7CvzwMDE2zvwUz1PZhZctHVOZNdBdEyRTPOkFnITYO4k6BTK0HkFw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP7cUAmB+eavT+DrK3GyMeyMtWIQhq38bn/0BuYqEqb/ofTJUouY4jKD244dfWwBkQ==",
                             PhoneNumberConfirmed = false,
-                            RegisterationDate = new DateTime(2023, 5, 23, 21, 17, 51, 768, DateTimeKind.Utc).AddTicks(2466),
+                            RegisterationDate = new DateTime(2023, 5, 20, 18, 56, 36, 715, DateTimeKind.Utc).AddTicks(2261),
                             SecurityStamp = "74A23521-DE60-4063-BD50-74EF88A9C24F",
                             TenantId = "3E090B05-5C07-49E9-968B-83E73CFA2E0E",
                             TenantName = "string",
@@ -338,6 +341,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
@@ -365,6 +372,10 @@ namespace Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -397,6 +408,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TenantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -414,6 +429,10 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

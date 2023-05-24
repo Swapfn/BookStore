@@ -9,6 +9,7 @@ namespace Data.Repositories
         {
             _context = context;
         }
+
         public void Dispose() => _context.Dispose();
 
         public int SaveChanges()

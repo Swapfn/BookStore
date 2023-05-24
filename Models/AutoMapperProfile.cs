@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Models.DTO;
+using Models.Models;
 
 namespace Models
 {
@@ -7,7 +9,7 @@ namespace Models
         public AutoMapperProfile()
         {
             //CreateMap<, >().ReverseMap();
-
+            CreateMap<Book, BookDTO>().ReverseMap();
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230520185000_init")]
-    partial class init
+    [Migration("20230523211752_fix")]
+    partial class fix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BookReview", b =>
+                {
+                    b.Property<int>("BooksReviewsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReviewsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksReviewsId", "ReviewsId");
+
+                    b.HasIndex("ReviewsId");
+
+                    b.ToTable("BookReview");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -264,18 +279,18 @@ namespace Data.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             CityID = 0,
-                            ConcurrencyStamp = "77ce5da9-c96f-452e-8eea-4aa67701c77c",
+                            ConcurrencyStamp = "337fc6b6-fde8-4d8f-af69-f11f1f35b95c",
                             CountryID = 0,
                             Email = "string",
                             EmailConfirmed = false,
                             FirstName = "string",
-                            LastLogin = new DateTime(2023, 5, 20, 18, 49, 59, 667, DateTimeKind.Utc).AddTicks(8045),
+                            LastLogin = new DateTime(2023, 5, 23, 21, 17, 51, 768, DateTimeKind.Utc).AddTicks(2470),
                             LastName = "string",
                             LockoutEnabled = false,
                             NormalizedUserName = "STRING",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG3Ql3jLbsGGhejhD7KvvFRCgb+CMWOF42hIWAvEpgRtlYplxd35JZseTD1okvb5yA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJTNqaT4wjUxp7CvzwMDE2zvwUz1PZhZctHVOZNdBdEyRTPOkFnITYO4k6BTK0HkFw==",
                             PhoneNumberConfirmed = false,
-                            RegisterationDate = new DateTime(2023, 5, 20, 18, 49, 59, 667, DateTimeKind.Utc).AddTicks(8042),
+                            RegisterationDate = new DateTime(2023, 5, 23, 21, 17, 51, 768, DateTimeKind.Utc).AddTicks(2466),
                             SecurityStamp = "74A23521-DE60-4063-BD50-74EF88A9C24F",
                             TenantId = "3E090B05-5C07-49E9-968B-83E73CFA2E0E",
                             TenantName = "string",
@@ -326,10 +341,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TenantName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
@@ -356,14 +367,7 @@ namespace Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenantName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -372,8 +376,6 @@ namespace Data.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("ReviewId");
 
                     b.ToTable("Books");
                 });
@@ -398,10 +400,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TenantName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -422,10 +420,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TenantName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -438,6 +432,21 @@ namespace Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("BookReview", b =>
+                {
+                    b.HasOne("Models.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksReviewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Models.Review", null)
+                        .WithMany()
+                        .HasForeignKey("ReviewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -550,17 +559,9 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Models.Review", "Review")
-                        .WithMany("BooksReviews")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Author");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("Models.Models.Review", b =>
@@ -594,11 +595,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Models.Models.Category", b =>
                 {
                     b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("Models.Models.Review", b =>
-                {
-                    b.Navigation("BooksReviews");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models.Models;
+using Services;
 using System.Text;
 using WebAPI;
 
@@ -75,6 +76,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<TenantMiddleware>();
 RegisterServices.AddRepositories(builder.Services);
 RegisterServices.AddServices(builder.Services);
 var app = builder.Build();
@@ -96,7 +98,7 @@ using (IServiceScope? scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<TenantMiddleware>();
 app.MapControllers();
 
 app.Run();

@@ -1,0 +1,39 @@
+﻿using AutoMapper;
+using Data.Repositories.Contracts;
+using Models.DTO;
+using Models.Models;
+using Services.Contracts;
+
+namespace Services
+{
+    public class BookService : IBookService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IBookRepository _bookRepository;
+        private readonly ITenantService _tenant;
+
+        public BookService(IUnitOfWork unitOfWork, IMapper mapper, IBookRepository bookRepository, ITenantService tenant)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _bookRepository = bookRepository;
+            _tenant = tenant;
+        }
+
+
+        public BookDTO AddBook(BookDTO model)
+        {
+            Book entity = _mapper.Map<Book>(model);
+            entity.TenantId = _tenant.GetTenant();
+            _bookRepository.Add(entity);
+            _unitOfWork.SaveChanges();
+            return model;
+        }
+
+        public IEnumerable<BookDTO> GetAll()
+        {
+            return _mapper.Map<List<BookDTO>>(_bookRepository.GetAll().ToList());
+        }
+    }
+}

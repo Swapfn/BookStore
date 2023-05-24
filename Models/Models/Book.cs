@@ -9,7 +9,10 @@
         public decimal Price { get; set; }
         public int AuthorId { get; set; }
         public Author Author { get; set; } = null!;
-        public int ReviewId { get; set; }
-        public Review Review { get; set; } = null!;
+        public IEnumerable<Review> Reviews { get; set; }
+        public Book()
+        {
+            Reviews = new List<Review>();
+        }
     }
 }

@@ -259,7 +259,6 @@ namespace Data.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
-                    ReviewId = table.Column<int>(type: "int", nullable: false),
                     TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TenantName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -278,9 +277,27 @@ namespace Data.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookReview",
+                columns: table => new
+                {
+                    BooksReviewsId = table.Column<int>(type: "int", nullable: false),
+                    ReviewsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookReview", x => new { x.BooksReviewsId, x.ReviewsId });
                     table.ForeignKey(
-                        name: "FK_Books_Reviews_ReviewId",
-                        column: x => x.ReviewId,
+                        name: "FK_BookReview_Books_BooksReviewsId",
+                        column: x => x.BooksReviewsId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookReview_Reviews_ReviewsId",
+                        column: x => x.ReviewsId,
                         principalTable: "Reviews",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -298,7 +315,7 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "CityID", "ConcurrencyStamp", "CountryID", "Email", "EmailConfirmed", "FirstName", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "LoginIPAddress", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegisterIPAddress", "RegisterationDate", "SecurityStamp", "TenantId", "TenantName", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, 0, "77ce5da9-c96f-452e-8eea-4aa67701c77c", 0, "string", false, "string", new DateTime(2023, 5, 20, 18, 49, 59, 667, DateTimeKind.Utc).AddTicks(8045), "string", false, null, null, null, "STRING", "AQAAAAIAAYagAAAAEG3Ql3jLbsGGhejhD7KvvFRCgb+CMWOF42hIWAvEpgRtlYplxd35JZseTD1okvb5yA==", null, false, null, new DateTime(2023, 5, 20, 18, 49, 59, 667, DateTimeKind.Utc).AddTicks(8042), "74A23521-DE60-4063-BD50-74EF88A9C24F", "3E090B05-5C07-49E9-968B-83E73CFA2E0E", "string", false, "string" });
+                values: new object[] { 1, 0, 0, "97e06ef7-ea09-49f8-9f8c-b89d70619dd5", 0, "string", false, "string", new DateTime(2023, 5, 20, 18, 56, 36, 715, DateTimeKind.Utc).AddTicks(2267), "string", false, null, null, null, "STRING", "AQAAAAIAAYagAAAAEP7cUAmB+eavT+DrK3GyMeyMtWIQhq38bn/0BuYqEqb/ofTJUouY4jKD244dfWwBkQ==", null, false, null, new DateTime(2023, 5, 20, 18, 56, 36, 715, DateTimeKind.Utc).AddTicks(2261), "74A23521-DE60-4063-BD50-74EF88A9C24F", "3E090B05-5C07-49E9-968B-83E73CFA2E0E", "string", false, "string" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -345,6 +362,11 @@ namespace Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookReview_ReviewsId",
+                table: "BookReview",
+                column: "ReviewsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_AuthorId",
                 table: "Books",
                 column: "AuthorId");
@@ -353,11 +375,6 @@ namespace Data.Migrations
                 name: "IX_Books_CategoryId",
                 table: "Books",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_ReviewId",
-                table: "Books",
-                column: "ReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_UserId",
@@ -387,19 +404,22 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "BookReview");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
