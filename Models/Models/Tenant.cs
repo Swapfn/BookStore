@@ -2,25 +2,25 @@
 {
     public class Tenant
     {
-        public string TenantId { get; set; } = null!;
+        public string TenantId { get; set; }
     }
     public interface ITenantService
     {
         void SetTenant(string tenantId);
         string TenantId { get; }
-        public string GetTenant();
+        public string GetNewTenantId();
     }
     public class TenantService : ITenantService
     {
-        public string TenantId { get; private set; } = null!;
+        public string TenantId { get; private set; }
 
         public void SetTenant(string tenantId)
         {
             TenantId = tenantId;
         }
-        public string GetTenant()
+        public string GetNewTenantId()
         {
-            return TenantId;
+            return Guid.NewGuid().ToString();
         }
     }
 }

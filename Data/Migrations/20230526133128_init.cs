@@ -43,7 +43,6 @@ namespace Data.Migrations
                     LoginIPAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RegisterationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TenantName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -72,12 +71,27 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nationality = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TenantName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Authors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,8 +102,7 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TenantName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -235,8 +248,7 @@ namespace Data.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TenantName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,29 +262,53 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "BookAuthors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
-                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TenantName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_BookAuthors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
+                        name: "FK_BookAuthors_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_Categories_CategoryId",
+                        name: "FK_BookAuthors_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookCategories_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookCategories_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
@@ -280,24 +316,27 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookReview",
+                name: "BookReviews",
                 columns: table => new
                 {
-                    BooksReviewsId = table.Column<int>(type: "int", nullable: false),
-                    ReviewsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    ReviewId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookReview", x => new { x.BooksReviewsId, x.ReviewsId });
+                    table.PrimaryKey("PK_BookReviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookReview_Books_BooksReviewsId",
-                        column: x => x.BooksReviewsId,
+                        name: "FK_BookReviews_Books_BookId",
+                        column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookReview_Reviews_ReviewsId",
-                        column: x => x.ReviewsId,
+                        name: "FK_BookReviews_Reviews_ReviewId",
+                        column: x => x.ReviewId,
                         principalTable: "Reviews",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -314,8 +353,8 @@ namespace Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "CityID", "ConcurrencyStamp", "CountryID", "Email", "EmailConfirmed", "FirstName", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "LoginIPAddress", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegisterIPAddress", "RegisterationDate", "SecurityStamp", "TenantId", "TenantName", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, 0, "97e06ef7-ea09-49f8-9f8c-b89d70619dd5", 0, "string", false, "string", new DateTime(2023, 5, 20, 18, 56, 36, 715, DateTimeKind.Utc).AddTicks(2267), "string", false, null, null, null, "STRING", "AQAAAAIAAYagAAAAEP7cUAmB+eavT+DrK3GyMeyMtWIQhq38bn/0BuYqEqb/ofTJUouY4jKD244dfWwBkQ==", null, false, null, new DateTime(2023, 5, 20, 18, 56, 36, 715, DateTimeKind.Utc).AddTicks(2261), "74A23521-DE60-4063-BD50-74EF88A9C24F", "3E090B05-5C07-49E9-968B-83E73CFA2E0E", "string", false, "string" });
+                columns: new[] { "Id", "AccessFailedCount", "CityID", "ConcurrencyStamp", "CountryID", "Email", "EmailConfirmed", "FirstName", "LastLogin", "LastName", "LockoutEnabled", "LockoutEnd", "LoginIPAddress", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegisterIPAddress", "RegisterationDate", "SecurityStamp", "TenantId", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 1, 0, 0, "a37ea610-2b89-4a54-a1f0-deda08aa7deb", 0, "string", false, "string", new DateTime(2023, 5, 26, 13, 31, 28, 484, DateTimeKind.Utc).AddTicks(3512), "string", false, null, null, null, "STRING", "AQAAAAIAAYagAAAAEJyde8bH/fQy6z+SZhhSPOdZj+RrYAr00IpQs7KYXfrOToqn48KhAv86G7o8rDgRuw==", null, false, null, new DateTime(2023, 5, 26, 13, 31, 28, 484, DateTimeKind.Utc).AddTicks(3507), "74A23521-DE60-4063-BD50-74EF88A9C24F", "3E090B05-5C07-49E9-968B-83E73CFA2E0E", false, "string" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -362,19 +401,34 @@ namespace Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookReview_ReviewsId",
-                table: "BookReview",
-                column: "ReviewsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
+                name: "IX_BookAuthors_AuthorId",
+                table: "BookAuthors",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_CategoryId",
-                table: "Books",
+                name: "IX_BookAuthors_BookId",
+                table: "BookAuthors",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookCategories_BookId",
+                table: "BookCategories",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookCategories_CategoryId",
+                table: "BookCategories",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookReviews_BookId",
+                table: "BookReviews",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookReviews_ReviewId",
+                table: "BookReviews",
+                column: "ReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_UserId",
@@ -404,22 +458,28 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BookReview");
+                name: "BookAuthors");
+
+            migrationBuilder.DropTable(
+                name: "BookCategories");
+
+            migrationBuilder.DropTable(
+                name: "BookReviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Books");
-
-            migrationBuilder.DropTable(
-                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

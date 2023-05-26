@@ -27,7 +27,7 @@ namespace Services
             List<Claim> authClaims = new()
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-                new Claim(ClaimConstants.TenantId, user.TenantId ?? string.Empty),
+                new Claim(ClaimConstants.TenantId, user.TenantId.ToString()),
             };
 
             // Role Claims

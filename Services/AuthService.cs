@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Data.Repositories.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -96,11 +97,11 @@ namespace Services
                 RegisterIPAddress = _context.HttpContext.Connection.LocalIpAddress.ToString(),
                 RegisterationDate = DateTime.UtcNow,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                TenantId = Guid.NewGuid().ToString(),
-                TenantName = model.TenantName,
+                //TenantId = Guid.NewGuid(),
             };
 
             IdentityResult resultUser = await _userManager.CreateAsync(user, model.Password);
+            ApplicationUser u = await _userManager.FindByNameAsync(user.UserName);
             if (!resultUser.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = resultUser.Errors });
             // Bind User to roles

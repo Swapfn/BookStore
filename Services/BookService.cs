@@ -25,8 +25,8 @@ namespace Services
         public BookDTO AddBook(BookDTO model)
         {
             Book entity = _mapper.Map<Book>(model);
-            entity.TenantId = _tenant.GetTenant();
             _bookRepository.Add(entity);
+            entity.TenantId = _tenant.TenantId;
             _unitOfWork.SaveChanges();
             return model;
         }

@@ -5,10 +5,10 @@
         public int Id { get; set; }
         public required string Name { get; set; }
         public string Nationality { get; set; }
-        public IEnumerable<Book> Books { get; set; }
+        public IEnumerable<BookAuthor> BookAuthors { get; set; }
         public Author()
         {
-            Books = new HashSet<Book>();
+            BookAuthors = new HashSet<BookAuthor>();
         }
     }
 }

@@ -5,11 +5,10 @@
         public int Id { get; set; }
         public required string Name { get; set; }
         public string Description { get; set; }
-        public IEnumerable<Book> Books { get; set; }
-        public string TenantId { get; set; } = null!;
+        public IEnumerable<BookCategory> BookCategories { get; set; }
         public Category()
         {
-            Books = new List<Book>();
+            BookCategories = new List<BookCategory>();
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Models.Models
         public string? LoginIPAddress { get; set; }
         public DateTime RegisterationDate { get; set; }
         public string TenantId { get; set; }
-        public string TenantName { get; set; }
         public ICollection<ApplicationUserRole> UserRoles { get; set; }
         public ICollection<ApplicationToken> UserTokens { get; set; }
         public IEnumerable<Review> Reviews { get; set; }
