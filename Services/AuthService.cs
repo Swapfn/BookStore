@@ -97,7 +97,7 @@ namespace Services
                 RegisterIPAddress = _context.HttpContext.Connection.LocalIpAddress.ToString(),
                 RegisterationDate = DateTime.UtcNow,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                //TenantId = Guid.NewGuid(),
+                TenantId = Guid.NewGuid().ToString(),
             };
 
             IdentityResult resultUser = await _userManager.CreateAsync(user, model.Password);

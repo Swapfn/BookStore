@@ -14,15 +14,27 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("/addBook")]
-        public IActionResult AddBook(BookDTO model)
+        public async Task<IActionResult> AddBook(BookDTO model)
         {
-            return Created("", Service.AddBook(model));
+            return Created("", await Service.AddBook(model));
         }
         [HttpGet]
         [Route("/getBooks")]
-        public IActionResult GetBooks()
+        public async Task<IActionResult> GetBooks()
         {
-            return Ok(Service.GetAll());
+            return Ok(await Service.GetAll());
         }
+        //[HttpPut]
+        //[Route("/editBook")]
+        //public IActionResult GetBooks()
+        //{
+        //    return Ok(Service.GetAll());
+        //}
+        //[HttpDelete]
+        //[Route("/deleteBook")]
+        //public IActionResult GetBooks()
+        //{
+        //    return Ok(Service.GetAll());
+        //}
     }
 }

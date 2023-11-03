@@ -26,16 +26,6 @@ namespace WebAPI
                 string? tenantId = claims.FirstOrDefault(c => c.Type == ClaimConstants.TenantId)?.Value;
                 _tenantService.SetTenant(tenantId);
             }
-            //if (context.Request.Body.TryGetValue("tenant", out var values))
-            //{
-            //    var key = values.First();
-            //    tenant = config.Value
-            //        .Tenants
-            //        .FirstOrDefault(t => t.Name.Equals(key?.Trim(), StringComparison.OrdinalIgnoreCase)) ?? tenant;
-            //}
-            //logger.LogInformation("Using the tenant {tenant}", tenant.Name);
-            //_tenantService.SetTenant(tenant);
-
             await next(context);
         }
     }

@@ -4,22 +4,22 @@ using System.Linq.Expressions;
 
 namespace Data.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T, TId> : IBaseRepository<T, TId> where T : class
     {
         readonly ApplicationDbContext _context;
         public BaseRepository(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public  virtual T Add(T entity)
+        public async virtual Task<T> Add(T entity)
         {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
             return entity;
         }
 
-        public virtual void Delete(int ID)
+        public async virtual Task Delete(TId ID)
         {
-            T entity = GetByID(ID);
+            T entity = await GetByID(ID);
             if (entity != null)
                 _context.Set<T>().Remove(entity);
         }
@@ -29,9 +29,9 @@ namespace Data.Repositories
             return _context.Set<T>().AsNoTracking();
         }
 
-        public virtual T GetByID(int ID)
+        public async virtual Task<T> GetByID(TId ID)
         {
-            return _context.Set<T>().Find(ID);
+            return await _context.Set<T>().FindAsync(ID);
         }
 
         public virtual IQueryable<T> Search(Expression<Func<T, bool>> expression)
@@ -39,7 +39,7 @@ namespace Data.Repositories
             return _context.Set<T>().Where(expression).AsNoTracking();
         }
 
-        public virtual T Update(int ID, T entity)
+        public virtual T Update(TId ID, T entity)
         {
             _context.Set<T>().Update(entity);
             return entity;

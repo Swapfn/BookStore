@@ -4,7 +4,9 @@ namespace Services.Contracts
 {
     public interface IBookService
     {
-        public IEnumerable<BookDTO> GetAll();
-        public BookDTO AddBook(BookDTO model); 
+        public Task <IEnumerable<BookDTO>> GetAll();
+        public Task<BookDTO> AddBook(BookDTO model);
+        public BookDTO EditBook(BookDTO model);
+        public void DeleteBook(int id);
     }
 }
